@@ -1,0 +1,40 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+**/logs/
+**/tmp/
+**/.mvn/
+**/build/
+
+# IDEs
+/.idea/
+*.iml
+*.ipr
+*.iws
+/.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Others
+*.log
+*.swp
+*.swo
+
+# Eclipse
+*.classpath
+*.project
+*.settings/
+
+# Test reports
+**/surefire-reports/
+
+# Environment
+.env
