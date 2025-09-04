@@ -1,7 +1,7 @@
-package br.com.erudio.controllers;
+package br.com.estech.controllers;
 
-import br.com.erudio.data.dto.PersonDTO;
-import br.com.erudio.services.PersonServices;
+import br.com.estech.data.dto.PersonDTO;
+import br.com.estech.services.PersonServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/api/test/v1")
 public class PersonController {
 
     @Autowired

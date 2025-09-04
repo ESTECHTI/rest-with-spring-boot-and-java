@@ -1,11 +1,11 @@
-package br.com.erudio.services;
+package br.com.estech.services;
 
-import br.com.erudio.data.dto.PersonDTO;
-import br.com.erudio.exception.ResourceNotFoundException;
-import static br.com.erudio.mapper.ObjectMapper.parseListObjects;
-import static br.com.erudio.mapper.ObjectMapper.parseObject;
-import br.com.erudio.model.Person;
-import br.com.erudio.repository.PersonRepository;
+import br.com.estech.data.dto.PersonDTO;
+import br.com.estech.exception.ResourceNotFoundException;
+import static br.com.estech.mapper.ObjectMapper.parseListObjects;
+import static br.com.estech.mapper.ObjectMapper.parseObject;
+import br.com.estech.model.Person;
+import br.com.estech.repository.PersonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package br.com.erudio.mapper;
+package br.com.estech.mapper;
 
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;

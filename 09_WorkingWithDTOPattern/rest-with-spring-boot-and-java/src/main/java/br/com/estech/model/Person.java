@@ -1,4 +1,4 @@
-package br.com.erudio.model;
+package br.com.estech.model;
 
 import jakarta.persistence.*;
 

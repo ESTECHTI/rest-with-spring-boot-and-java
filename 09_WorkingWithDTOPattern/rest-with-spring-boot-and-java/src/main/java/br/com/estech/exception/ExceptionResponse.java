@@ -1,4 +1,4 @@
-package br.com.erudio.exception;
+package br.com.estech.exception;
 
 import java.util.Date;
 

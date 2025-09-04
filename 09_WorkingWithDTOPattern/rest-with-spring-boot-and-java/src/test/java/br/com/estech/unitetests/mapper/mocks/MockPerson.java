@@ -1,10 +1,10 @@
-package br.com.erudio.unitetests.mapper.mocks;
+package br.com.estech.unitetests.mapper.mocks;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.erudio.data.dto.PersonDTO;
-import br.com.erudio.model.Person;
+import br.com.estech.data.dto.PersonDTO;
+import br.com.estech.model.Person;
 
 public class MockPerson {
 
