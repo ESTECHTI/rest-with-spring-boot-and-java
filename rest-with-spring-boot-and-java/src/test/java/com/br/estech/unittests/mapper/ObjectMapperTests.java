@@ -1,15 +1,15 @@
 package com.br.estech.unittests.mapper;
 
-import com.br.estech.data.dto.v1.PersonDTO;
-import com.br.estech.model.Person;
+import br.com.estech.data.dto.PersonDTO;
+import br.com.estech.model.Person;
 import com.br.estech.unittests.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.br.estech.mapper.ObjectMapper.parseListObjects;
-import static com.br.estech.mapper.ObjectMapper.parseObject;
+import static br.com.estech.mapper.ObjectMapper.parseListObjects;
+import static br.com.estech.mapper.ObjectMapper.parseObject;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ObjectMapperTests {

@@ -1,9 +1,0 @@
-com\br\estech\exception\handler\CustomEntityResponseHandler.class
-com\br\estech\services\PersonServices.class
-com\br\estech\utils\NumberUtils.class
-com\br\estech\exception\ResourceNotFoundException.class
-com\br\estech\exception\ExceptionResponse.class
-com\br\estech\controllers\PersonController.class
-com\br\estech\Startup.class
-com\br\estech\model\Person.class
-com\br\estech\repository\PersonRepository.class

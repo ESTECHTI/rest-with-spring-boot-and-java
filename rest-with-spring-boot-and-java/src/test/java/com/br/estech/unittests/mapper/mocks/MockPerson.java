@@ -1,7 +1,7 @@
 package com.br.estech.unittests.mapper.mocks;
 
-import com.br.estech.data.dto.v1.PersonDTO;
-import com.br.estech.model.Person;
+import br.com.estech.data.dto.PersonDTO;
+import br.com.estech.model.Person;
 
 import java.util.ArrayList;
 import java.util.List;
