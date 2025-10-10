@@ -16,6 +16,15 @@ public class MockBook {
         return mockBookDTO(0);
     }
 
+    public List<Book> mockBookEntityList() {
+        List<Book> books = new ArrayList<Book>();
+        for (int i = 0; i < 14; i++) {
+            books.add(mockBookEntity(i));
+        }
+        return books;
+    }
+
+
     public List<Book> mockEntityList() {
         List<Book> books = new ArrayList<Book>();
         for (int i = 0; i < 14; i++) {
