@@ -1,4 +1,4 @@
-package br.com.estech.services;
+package br.com.estech.unittests.services;
 
 import br.com.estech.data.dto.BookDTO;
 import br.com.estech.exception.ResourceNotFoundException;
@@ -8,11 +8,10 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import br.com.estech.unitetests.mapper.mocks.MockBook;
+import br.com.estech.unittests.mapper.mocks.MockBook;
 import br.com.estech.repository.BookRepository;
 import br.com.estech.model.Book;
 
