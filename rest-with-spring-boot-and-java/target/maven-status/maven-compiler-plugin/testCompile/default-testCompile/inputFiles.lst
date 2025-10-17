@@ -1,6 +1,8 @@
-C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\services\BookServicesTest.java
-C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\services\PersonServicesTest.java
-C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\StartupTests.java
-C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\unitetests\mapper\mocks\MockBook.java
-C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\unitetests\mapper\mocks\MockPerson.java
-C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\unitetests\mapper\ObjectMapperTests.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\config\TestConfigs.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\swagger\SwaggerIntegrationTest.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\testcontainers\AbstractIntegrationTest.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\unittests\mapper\mocks\MockBook.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\unittests\mapper\mocks\MockPerson.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\unittests\mapper\ObjectMapperTests.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\unittests\services\BookServicesTest.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\unittests\services\PersonServicesTest.java

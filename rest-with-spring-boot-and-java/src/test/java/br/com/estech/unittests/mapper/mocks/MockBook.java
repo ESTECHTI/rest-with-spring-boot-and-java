@@ -1,4 +1,4 @@
-package br.com.estech.unitetests.mapper.mocks;
+package br.com.estech.unittests.mapper.mocks;
 
 import br.com.estech.data.dto.BookDTO;
 import br.com.estech.model.Book;
