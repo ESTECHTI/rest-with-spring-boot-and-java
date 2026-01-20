@@ -4,6 +4,7 @@ import br.com.estech.data.dto.PersonDTO;
 import br.com.estech.exception.RequiredObjectIsNullException;
 import br.com.estech.model.Person;
 import br.com.estech.repository.PersonRepository;
+import br.com.estech.services.PersonServices;
 import br.com.estech.unittests.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -2,12 +2,14 @@ package br.com.estech.integrationtests.swagger;
 
 import br.com.estech.config.TestConfigs;
 import br.com.estech.integrationtests.testcontainers.AbstractIntegrationTest;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Disabled("Docker environment is not available")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 class SwaggerIntegrationTest extends AbstractIntegrationTest {
 

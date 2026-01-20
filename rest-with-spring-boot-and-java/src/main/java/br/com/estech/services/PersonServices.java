@@ -1,4 +1,4 @@
-package br.com.estech.unittests.services;
+package br.com.estech.services;
 
 import br.com.estech.controllers.PersonController;
 import br.com.estech.data.dto.PersonDTO;

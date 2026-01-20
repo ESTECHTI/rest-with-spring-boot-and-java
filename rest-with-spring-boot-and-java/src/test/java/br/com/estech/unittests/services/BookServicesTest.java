@@ -2,6 +2,7 @@ package br.com.estech.unittests.services;
 
 import br.com.estech.data.dto.BookDTO;
 import br.com.estech.exception.ResourceNotFoundException;
+import br.com.estech.services.BookServices;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

@@ -1,4 +1,4 @@
-package br.com.estech.exception.hadler;
+package br.com.estech.exception.handler;
 
 import br.com.estech.exception.ExceptionResponse;
 import br.com.estech.exception.RequiredObjectIsNullException;

@@ -19,6 +19,7 @@
 		<dozer.version>7.0.0</dozer.version>
 		<springdoc.version>2.7.0</springdoc.version>
         <testcontainers.version>1.20.4</testcontainers.version>
+		<mockito.version>5.11.0</mockito.version>
 	</properties>
 	<dependencies>
 
@@ -70,7 +71,11 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-inline</artifactId>
+			<scope>test</scope>
+		</dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>mysql</artifactId>
@@ -127,6 +132,14 @@
 
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.2.5</version>
+				<configuration>
+					<argLine>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar=inline</argLine>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
