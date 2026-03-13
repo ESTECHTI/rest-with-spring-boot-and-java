@@ -1,3 +1,29 @@
 {
-  "java.configuration.updateBuildConfiguration": "automatic"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "java.debug.settings.enableRunDebugCodeLens": false,
+  "code-runner.runInTerminal": true,
+  "code-runner.cwd": "$workspaceRoot",
+  "code-runner.executorMap": {
+    "java": "\"$workspaceRoot\\.vscode\\run-spring-boot.cmd\""
+  },
+  "editor.semanticHighlighting.enabled": true,
+  "editor.semanticTokenColorCustomizations": {
+    "rules": {
+      "class:java": "#6A9955",
+      "type:java": "#6A9955"
+    }
+  },
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": [
+          "support.class.java",
+          "entity.name.type.class.java"
+        ],
+        "settings": {
+          "foreground": "#6A9955"
+        }
+      }
+    ]
+  }
 }

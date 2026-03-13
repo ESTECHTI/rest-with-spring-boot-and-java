@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot Startup",
+      "request": "launch",
+      "mainClass": "br.com.estech.Startup",
+      "projectName": "rest-with-spring-boot-and-java-estech",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    }
+  ]
+}

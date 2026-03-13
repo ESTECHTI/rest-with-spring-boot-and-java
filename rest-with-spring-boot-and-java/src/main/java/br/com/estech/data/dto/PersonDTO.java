@@ -2,10 +2,12 @@ package br.com.estech.data.dto;
 
 import br.com.estech.model.Person;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+@Relation(collectionRelation = "people")
 public class PersonDTO extends RepresentationModel<PersonDTO> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -15,8 +17,10 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
     private String lastName;
     private String address;
     private String gender;
+    private Boolean enabled;
 
-    public PersonDTO() {}
+    public PersonDTO() {
+    }
 
     public Long getId() {
         return id;
@@ -58,14 +62,30 @@ public class PersonDTO extends RepresentationModel<PersonDTO> implements Seriali
         this.gender = gender;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof PersonDTO person)) return false;
-        return Objects.equals(getId(), person.getId()) && Objects.equals(getFirstName(), person.getFirstName()) && Objects.equals(getLastName(), person.getLastName()) && Objects.equals(getAddress(), person.getAddress()) && Objects.equals(getGender(), person.getGender());
+    public Boolean getEnabled() {
+        return enabled;
     }
 
-    @Override
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass())
+            return false;
+        if (!super.equals(object))
+            return false;
+        PersonDTO personDTO = (PersonDTO) object;
+        return java.util.Objects.equals(getId(), personDTO.getId())
+                && java.util.Objects.equals(getFirstName(), personDTO.getFirstName())
+                && java.util.Objects.equals(getLastName(), personDTO.getLastName())
+                && java.util.Objects.equals(getAddress(), personDTO.getAddress())
+                && java.util.Objects.equals(getGender(), personDTO.getGender())
+                && java.util.Objects.equals(getEnabled(), personDTO.getEnabled());
+    }
+
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getAddress(), getGender());
+        return Objects.hash(super.hashCode(), getId(), getFirstName(), getLastName(), getAddress(), getGender(),
+                getEnabled());
     }
 }
