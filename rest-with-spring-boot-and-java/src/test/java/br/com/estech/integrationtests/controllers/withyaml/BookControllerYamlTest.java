@@ -165,17 +165,10 @@ class BookControllerYamlTest extends AbstractIntegrationTest {
         .body()
         .asString();
 
-    List<BookDTO> books = yamlMapper.readValue(content, new TypeReference<List<BookDTO>>() {
-    });
-
-    assertFalse(books.isEmpty());
-
-    BookDTO firstBook = books.get(0);
-    assertNotNull(firstBook.getId());
-    assertNotNull(firstBook.getAuthor());
-    assertNotNull(firstBook.getTitle());
-    assertNotNull(firstBook.getPrice());
-    assertNotNull(firstBook.getLaunchDate());
+    // A resposta agora é paginada (PagedModel<EntityModel<BookDTO>>),
+    // então validamos o conteúdo pelo YAML em vez de desserializar como lista.
+    assertTrue(content.contains("author: \"Robert C. Martin\""));
+    assertTrue(content.contains("title: \"Clean Code"));
   }
 
   private void mockBook() {

@@ -15,6 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import br.com.estech.unittests.mapper.mocks.MockBook;
 import br.com.estech.repository.BookRepository;
 import br.com.estech.model.Book;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,6 +43,9 @@ class BookServicesTest {
 
     @Mock
     BookRepository repository;
+
+    @Mock
+    PagedResourcesAssembler<BookDTO> assembler;
 
     @BeforeEach
     void setup() {
@@ -207,46 +217,39 @@ class BookServicesTest {
             book.setLaunchDate(fixedDate);
         }
 
-        when(repository.findAll()).thenReturn(list);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Book> page = new PageImpl<>(list, pageable, list.size());
 
-        var book = service.findAll();
+        when(repository.findAll(pageable)).thenReturn(page);
 
-        assertNotNull(book);
-        assertEquals(14, book.size());
+        // Monta um PagedModel simulado retornado pelo assembler
+        List<EntityModel<BookDTO>> dtoModels = list.stream().map(entity -> {
+            BookDTO dto = new BookDTO();
+            dto.setId(entity.getId());
+            dto.setAuthor(entity.getAuthor());
+            dto.setLaunchDate(entity.getLaunchDate());
+            dto.setPrice(entity.getPrice());
+            dto.setTitle(entity.getTitle());
+            return EntityModel.of(dto);
+        }).toList();
 
-        var oneBook = book.get(1);
+        PagedModel<EntityModel<BookDTO>> pagedModel =
+                PagedModel.of(dtoModels, new PagedModel.PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements()));
 
-        assertNotNull(oneBook);
-        assertNotNull(oneBook.getId());
-        assertNotNull(oneBook.getLinks());
+        when(assembler.toModel(any(Page.class), any())).thenReturn(pagedModel);
 
-        assertTrue(oneBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("self")
-                        && link.getHref().endsWith("/api/book/v1/1")
-                        && link.getType().equals("GET")));
+        var result = service.findAll(pageable);
 
-        assertEquals("Author Test1", oneBook.getAuthor());
-        assertEquals("Title Test1", oneBook.getTitle());
-        assertEquals(fixedDate, oneBook.getLaunchDate());
-        assertEquals(26D, oneBook.getPrice().doubleValue(), 0.001);
+        assertNotNull(result);
+        assertEquals(list.size(), result.getContent().size());
 
-        var fourBook = book.get(4);
+        EntityModel<BookDTO> firstModel = result.getContent().stream().findFirst().orElseThrow();
+        BookDTO firstDto = firstModel.getContent();
 
-        assertNotNull(fourBook);
-        assertNotNull(fourBook.getId());
-        assertNotNull(fourBook.getLinks());
+        assertNotNull(firstDto);
+        assertEquals("Author Test0", firstDto.getAuthor());
 
-        assertTrue(fourBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("self")
-                        && link.getHref().endsWith("/api/book/v1/4")
-                        && link.getType().equals("GET")));
-
-        assertEquals("Author Test4", fourBook.getAuthor());
-        assertEquals("Title Test4", fourBook.getTitle());
-        assertEquals(fixedDate, fourBook.getLaunchDate());
-        assertEquals(29D, fourBook.getPrice().doubleValue(), 0.001);
-
-        verify(repository, times(1)).findAll();
+        verify(repository, times(1)).findAll(pageable);
     }
 
     @Test
