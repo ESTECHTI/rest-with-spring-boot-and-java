@@ -1,11 +1,10 @@
 br\com\estech\integrationtests\testcontainers\AbstractIntegrationTest$Initializer.class
-br\com\estech\integrationtests\controllers\withjson\PersonControllerTest.class
-br\com\estech\unittests\mapper\mocks\MockBook.class
 br\com\estech\unittests\mapper\mocks\MockPerson.class
-br\com\estech\unittests\services\PersonServicesTest.class
-br\com\estech\integrationtests\testcontainers\AbstractIntegrationTest.class
 br\com\estech\integrationtests\swagger\SwaggerIntegrationTest.class
 br\com\estech\unittests\services\BookServicesTest.class
 br\com\estech\unittests\mapper\ObjectMapperTests.class
+br\com\estech\unittests\mapper\mocks\MockBook.class
+br\com\estech\unittests\services\PersonServicesTest.class
+br\com\estech\integrationtests\testcontainers\AbstractIntegrationTest.class
 br\com\estech\config\TestConfigs.class
 br\com\estech\integrationtests\dto\PersonDTO.class

@@ -4,7 +4,6 @@ import br.com.estech.config.TestConfigs;
 import br.com.estech.integrationtests.dto.BookDTO;
 import br.com.estech.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import io.restassured.builder.RequestSpecBuilder;
@@ -21,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -35,6 +33,7 @@ class BookControllerXmlTest extends AbstractIntegrationTest {
   @BeforeAll
   static void setUp() {
     xmlMapper = new XmlMapper();
+    xmlMapper.findAndRegisterModules();
     xmlMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
     specification = new RequestSpecBuilder()

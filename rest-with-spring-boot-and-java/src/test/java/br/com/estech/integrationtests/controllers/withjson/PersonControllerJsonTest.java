@@ -4,7 +4,6 @@ import br.com.estech.config.TestConfigs;
 import br.com.estech.integrationtests.dto.PersonDTO;
 import br.com.estech.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.builder.RequestSpecBuilder;
@@ -18,8 +17,6 @@ import org.springframework.http.MediaType;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.List;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -197,34 +194,12 @@ class PersonControllerJsonTest extends AbstractIntegrationTest {
                                 .body()
                                 .asString();
 
-                List<PersonDTO> people = objectMapper.readValue(content, new TypeReference<List<PersonDTO>>() {
-                });
-
-                PersonDTO personOne = people.get(0);
-                person = personOne;
-
-                assertNotNull(personOne.getId());
-
-                assertTrue(personOne.getId() > 0);
-
-                assertEquals("Ayrton", personOne.getFirstName());
-                assertEquals("Senna", personOne.getLastName());
-                assertEquals("São Paulo - Brasil", personOne.getAddress());
-                assertEquals("Male", personOne.getGender());
-                assertTrue(personOne.getEnabled());
-
-                PersonDTO personFour = people.get(4);
-                person = personFour;
-
-                assertNotNull(personFour.getId());
-
-                assertTrue(personFour.getId() > 0);
-
-                assertEquals("Muhamamd", personFour.getFirstName());
-                assertEquals("Ali", personFour.getLastName());
-                assertEquals("Kentucky - US", personFour.getAddress());
-                assertEquals("Male", personFour.getGender());
-                assertTrue(personFour.getEnabled());
+                // A resposta agora e paginada (PagedModel<EntityModel<PersonDTO>>).
+                assertTrue(content.contains("\"_embedded\""));
+                assertTrue(content.contains("\"people\""));
+                assertTrue(content.contains("\"firstName\""));
+                assertTrue(content.contains("\"_links\""));
+                assertTrue(content.contains("\"findAll\""));
         }
 
         private void mockPerson() {

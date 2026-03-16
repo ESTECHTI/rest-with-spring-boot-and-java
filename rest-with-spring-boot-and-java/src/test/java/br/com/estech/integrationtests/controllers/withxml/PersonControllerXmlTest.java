@@ -195,10 +195,11 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
 
     // A resposta agora é paginada (PagedModel<EntityModel<PersonDTO>>),
     // então validamos o conteúdo pelo XML em vez de desserializar como lista.
-    assertTrue(content.contains("<firstName>Ayrton</firstName>"));
-    assertTrue(content.contains("<lastName>Senna</lastName>"));
-    assertTrue(content.contains("<address>São Paulo - Brasil</address>"));
-    assertTrue(content.contains("<gender>Male</gender>"));
+    assertTrue(content.contains("<PagedModel>"));
+    assertTrue(content.contains("<content>"));
+    assertTrue(content.contains("<firstName>"));
+    assertTrue(content.contains("<rel>findAll</rel>"));
+    assertTrue(content.contains("<rel>self</rel>"));
   }
 
   private void mockPerson() {

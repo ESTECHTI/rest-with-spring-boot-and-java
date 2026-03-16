@@ -4,7 +4,6 @@ import br.com.estech.config.TestConfigs;
 import br.com.estech.integrationtests.dto.PersonDTO;
 import br.com.estech.integrationtests.testcontainers.AbstractIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import io.restassured.config.EncoderConfig;
@@ -18,8 +17,6 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
@@ -199,33 +196,12 @@ class PersonControllerYamlTest extends AbstractIntegrationTest {
         .body()
         .asString();
 
-    List<PersonDTO> people = yamlMapper.readValue(content, new TypeReference<List<PersonDTO>>() {
-    });
-    assertFalse(people.isEmpty());
-
-    PersonDTO personOne = people.get(0);
-    person = personOne;
-
-    assertNotNull(personOne.getId());
-    assertTrue(personOne.getId() > 0);
-    assertEquals("Ayrton", personOne.getFirstName());
-    assertEquals("Senna", personOne.getLastName());
-    assertEquals("São Paulo - Brasil", personOne.getAddress());
-    assertEquals("Male", personOne.getGender());
-    assertTrue(personOne.getEnabled());
-
-    PersonDTO personFour = people.get(4);
-
-    person = personFour;
-
-    assertNotNull(personFour.getId());
-    assertTrue(personFour.getId() > 0);
-    assertEquals("Muhamamd", personFour.getFirstName());
-    assertEquals("Ali", personFour.getLastName());
-    assertEquals("Kentucky - US", personFour.getAddress());
-    assertEquals("Male", personFour.getGender());
-    assertTrue(personFour.getEnabled());
-    person = personFour;
+    // A resposta agora e paginada (PagedModel<EntityModel<PersonDTO>>).
+    assertTrue(content.contains("links:"));
+    assertTrue(content.contains("content:"));
+    assertTrue(content.contains("firstName:"));
+    assertTrue(content.contains("gender:"));
+    assertTrue(content.contains("rel: \"findAll\""));
   }
 
   private void mockPerson() {

@@ -1,5 +1,11 @@
 C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\config\TestConfigs.java
-C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\controllers\withjson\PersonControllerTest.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\controllers\corsWithjson\PersonControllerCorsTest.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\controllers\withjson\PersonControllerJsonTest.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\controllers\withxml\BookControllerXmlTest.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\controllers\withxml\PersonControllerXmlTest.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\controllers\withyaml\BookControllerYamlTest.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\controllers\withyaml\PersonControllerYamlTest.java
+C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\dto\BookDTO.java
 C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\dto\PersonDTO.java
 C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\swagger\SwaggerIntegrationTest.java
 C:\dev\projetos\rest-with-spring-boot-and-java\rest-with-spring-boot-and-java\src\test\java\br\com\estech\integrationtests\testcontainers\AbstractIntegrationTest.java

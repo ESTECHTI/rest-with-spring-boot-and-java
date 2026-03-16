@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedModel;
 
 import java.time.LocalDateTime;
@@ -36,232 +37,232 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class BookServicesTest {
 
-    MockBook input;
+        MockBook input;
 
-    @InjectMocks
-    private BookServices service;
+        @InjectMocks
+        private BookServices service;
 
-    @Mock
-    BookRepository repository;
+        @Mock
+        BookRepository repository;
 
-    @Mock
-    PagedResourcesAssembler<BookDTO> assembler;
+        @Mock
+        PagedResourcesAssembler<BookDTO> assembler;
 
-    @BeforeEach
-    void setup() {
-        input = new MockBook();
-        MockitoAnnotations.openMocks(this);
-    }
-
-    @Test
-    void findById() {
-        Book book = input.mockBookEntity(1);
-        book.setId(1L);
-        when(repository.findById(1L)).thenReturn(Optional.of(book));
-        var fourBook = service.findById(1L);
-
-        assertNotNull(fourBook);
-        assertNotNull(fourBook.getId());
-        assertNotNull(fourBook.getLinks());
-
-        assertTrue(fourBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("self")
-                        && link.getHref().endsWith("/api/book/v1/1")
-                        && link.getType().equals("GET")));
-
-        assertTrue(fourBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("findAll")
-                        && link.getHref().endsWith("/api/book/v1")
-                        && link.getType().equals("GET")));
-
-        assertTrue(fourBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("create")
-                        && link.getHref().endsWith("/api/book/v1")
-                        && link.getType().equals("POST")));
-
-        assertTrue(fourBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("update")
-                        && link.getHref().endsWith("/api/book/v1")
-                        && link.getType().equals("PUT")));
-
-        assertTrue(fourBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("delete")
-                        && link.getHref().endsWith("/api/book/v1/1")
-                        && link.getType().equals("DELETE")));
-
-        verify(repository, times(1)).findById(1L);
-    }
-
-    @Test
-    void testFindByIdNotFound() {
-        Long noExistentId = 999L;
-        when(repository.findById(noExistentId)).thenReturn(Optional.empty());
-
-        ResourceNotFoundException exception = assertThrows(
-                ResourceNotFoundException.class,
-                () -> service.findById(noExistentId));
-    }
-
-    @Test
-    void create() {
-
-        LocalDateTime fixedDate = LocalDateTime.of(2024, 10, 15, 10, 30, 0);
-
-        Book book = input.mockBookEntity(1);
-        book.setId(1L);
-        book.setLaunchDate(fixedDate);
-
-        BookDTO dto = input.mockBookDTO(1);
-        dto.setLaunchDate(fixedDate);
-
-        when(repository.save(any(Book.class))).thenReturn(book);
-
-        var oneBook = service.create(dto);
-
-        assertNotNull(oneBook);
-        assertNotNull(oneBook.getId());
-        assertNotNull(oneBook.getLinks());
-
-        assertTrue(oneBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("self")
-                        && link.getHref().endsWith("/api/book/v1/1")
-                        && link.getType().equals("GET")));
-
-        assertTrue(oneBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("findAll")
-                        && link.getHref().endsWith("/api/book/v1")
-                        && link.getType().equals("GET")));
-
-        assertTrue(oneBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("create")
-                        && link.getHref().endsWith("/api/book/v1")
-                        && link.getType().equals("POST")));
-
-        assertTrue(oneBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("update")
-                        && link.getHref().endsWith("/api/book/v1")
-                        && link.getType().equals("PUT")));
-
-        assertTrue(oneBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("delete")
-                        && link.getHref().endsWith("/api/book/v1/1")
-                        && link.getType().equals("DELETE")));
-
-        assertEquals("Author Test1", oneBook.getAuthor());
-        assertEquals("Title Test1", oneBook.getTitle());
-        assertEquals(fixedDate, oneBook.getLaunchDate());
-        assertEquals(26D, oneBook.getPrice().doubleValue(), 0.001);
-
-        verify(repository, times(1)).save(any(Book.class));
-    }
-
-    @Test
-    void update() {
-        LocalDateTime fixedDate = LocalDateTime.of(2024, 10, 15, 10, 30, 0);
-
-        Book book = input.mockBookEntity(1);
-        book.setId(1L);
-        book.setLaunchDate(fixedDate);
-
-        BookDTO dto = input.mockBookDTO(1);
-        dto.setLaunchDate(fixedDate);
-
-        when(repository.findById(1L)).thenReturn(Optional.of(book));
-        when(repository.save(book)).thenReturn((book));
-
-        var oneBook = service.update(dto);
-
-        assertNotNull(oneBook);
-        assertNotNull(oneBook.getId());
-        assertNotNull(oneBook.getLinks());
-
-        assertTrue(oneBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("self")
-                        && link.getHref().endsWith("/api/book/v1/1")
-                        && link.getType().equals("GET")));
-
-        assertTrue(oneBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("findAll")
-                        && link.getHref().endsWith("/api/book/v1")
-                        && link.getType().equals("GET")));
-
-        assertTrue(oneBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("create")
-                        && link.getHref().endsWith("/api/book/v1")
-                        && link.getType().equals("POST")));
-
-        assertTrue(oneBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("update")
-                        && link.getHref().endsWith("/api/book/v1")
-                        && link.getType().equals("PUT")));
-
-        assertTrue(oneBook.getLinks().stream()
-                .anyMatch(link -> link.getRel().value().equals("delete")
-                        && link.getHref().endsWith("/api/book/v1/1")
-                        && link.getType().equals("DELETE")));
-
-        assertEquals("Author Test1", oneBook.getAuthor());
-        assertEquals("Title Test1", oneBook.getTitle());
-        assertEquals(fixedDate, oneBook.getLaunchDate());
-        assertEquals(26D, oneBook.getPrice().doubleValue(), 0.001);
-
-        verify(repository, times(1)).findById(1L);
-        verify(repository, times(1)).save(any(Book.class));
-    }
-
-    @Test
-    void findAll() {
-        LocalDateTime fixedDate = LocalDateTime.of(2024, 10, 15, 10, 30, 0);
-        List<Book> list = input.mockBookEntityList();
-        for (Book book : list) {
-            book.setLaunchDate(fixedDate);
+        @BeforeEach
+        void setup() {
+                input = new MockBook();
+                MockitoAnnotations.openMocks(this);
         }
 
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Book> page = new PageImpl<>(list, pageable, list.size());
+        @Test
+        void findById() {
+                Book book = input.mockBookEntity(1);
+                book.setId(1L);
+                when(repository.findById(1L)).thenReturn(Optional.of(book));
+                var fourBook = service.findById(1L);
 
-        when(repository.findAll(pageable)).thenReturn(page);
+                assertNotNull(fourBook);
+                assertNotNull(fourBook.getId());
+                assertNotNull(fourBook.getLinks());
 
-        // Monta um PagedModel simulado retornado pelo assembler
-        List<EntityModel<BookDTO>> dtoModels = list.stream().map(entity -> {
-            BookDTO dto = new BookDTO();
-            dto.setId(entity.getId());
-            dto.setAuthor(entity.getAuthor());
-            dto.setLaunchDate(entity.getLaunchDate());
-            dto.setPrice(entity.getPrice());
-            dto.setTitle(entity.getTitle());
-            return EntityModel.of(dto);
-        }).toList();
+                assertTrue(fourBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("self")
+                                                && link.getHref().endsWith("/api/book/v1/1")
+                                                && link.getType().equals("GET")));
 
-        PagedModel<EntityModel<BookDTO>> pagedModel =
-                PagedModel.of(dtoModels, new PagedModel.PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements()));
+                assertTrue(fourBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("findAll")
+                                                && link.getHref().endsWith("/api/book/v1?page=0&size=12&direction=asc")
+                                                && link.getType().equals("GET")));
 
-        when(assembler.toModel(any(Page.class), any())).thenReturn(pagedModel);
+                assertTrue(fourBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("create")
+                                                && link.getHref().endsWith("/api/book/v1")
+                                                && link.getType().equals("POST")));
 
-        var result = service.findAll(pageable);
+                assertTrue(fourBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("update")
+                                                && link.getHref().endsWith("/api/book/v1")
+                                                && link.getType().equals("PUT")));
 
-        assertNotNull(result);
-        assertEquals(list.size(), result.getContent().size());
+                assertTrue(fourBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("delete")
+                                                && link.getHref().endsWith("/api/book/v1/1")
+                                                && link.getType().equals("DELETE")));
 
-        EntityModel<BookDTO> firstModel = result.getContent().stream().findFirst().orElseThrow();
-        BookDTO firstDto = firstModel.getContent();
+                verify(repository, times(1)).findById(1L);
+        }
 
-        assertNotNull(firstDto);
-        assertEquals("Author Test0", firstDto.getAuthor());
+        @Test
+        void testFindByIdNotFound() {
+                Long noExistentId = 999L;
+                when(repository.findById(noExistentId)).thenReturn(Optional.empty());
 
-        verify(repository, times(1)).findAll(pageable);
-    }
+                ResourceNotFoundException exception = assertThrows(
+                                ResourceNotFoundException.class,
+                                () -> service.findById(noExistentId));
+        }
 
-    @Test
-    void delete() {
-        Book book = input.mockBookEntity(1);
-        book.setId(1L);
-        when(repository.findById(1L)).thenReturn(Optional.of(book));
-        service.delete(1L);
-        verify(repository, times(1)).findById(anyLong());
-        verify(repository, times(1)).delete(any(Book.class));
-        verifyNoMoreInteractions(repository);
+        @Test
+        void create() {
 
-    }
+                LocalDateTime fixedDate = LocalDateTime.of(2024, 10, 15, 10, 30, 0);
+
+                Book book = input.mockBookEntity(1);
+                book.setId(1L);
+                book.setLaunchDate(fixedDate);
+
+                BookDTO dto = input.mockBookDTO(1);
+                dto.setLaunchDate(fixedDate);
+
+                when(repository.save(any(Book.class))).thenReturn(book);
+
+                var oneBook = service.create(dto);
+
+                assertNotNull(oneBook);
+                assertNotNull(oneBook.getId());
+                assertNotNull(oneBook.getLinks());
+
+                assertTrue(oneBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("self")
+                                                && link.getHref().endsWith("/api/book/v1/1")
+                                                && link.getType().equals("GET")));
+
+                assertTrue(oneBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("findAll")
+                                                && link.getHref().endsWith("/api/book/v1?page=0&size=12&direction=asc")
+                                                && link.getType().equals("GET")));
+
+                assertTrue(oneBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("create")
+                                                && link.getHref().endsWith("/api/book/v1")
+                                                && link.getType().equals("POST")));
+
+                assertTrue(oneBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("update")
+                                                && link.getHref().endsWith("/api/book/v1")
+                                                && link.getType().equals("PUT")));
+
+                assertTrue(oneBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("delete")
+                                                && link.getHref().endsWith("/api/book/v1/1")
+                                                && link.getType().equals("DELETE")));
+
+                assertEquals("Author Test1", oneBook.getAuthor());
+                assertEquals("Title Test1", oneBook.getTitle());
+                assertEquals(fixedDate, oneBook.getLaunchDate());
+                assertEquals(26D, oneBook.getPrice().doubleValue(), 0.001);
+
+                verify(repository, times(1)).save(any(Book.class));
+        }
+
+        @Test
+        void update() {
+                LocalDateTime fixedDate = LocalDateTime.of(2024, 10, 15, 10, 30, 0);
+
+                Book book = input.mockBookEntity(1);
+                book.setId(1L);
+                book.setLaunchDate(fixedDate);
+
+                BookDTO dto = input.mockBookDTO(1);
+                dto.setLaunchDate(fixedDate);
+
+                when(repository.findById(1L)).thenReturn(Optional.of(book));
+                when(repository.save(book)).thenReturn((book));
+
+                var oneBook = service.update(dto);
+
+                assertNotNull(oneBook);
+                assertNotNull(oneBook.getId());
+                assertNotNull(oneBook.getLinks());
+
+                assertTrue(oneBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("self")
+                                                && link.getHref().endsWith("/api/book/v1/1")
+                                                && link.getType().equals("GET")));
+
+                assertTrue(oneBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("findAll")
+                                                && link.getHref().endsWith("/api/book/v1?page=0&size=12&direction=asc")
+                                                && link.getType().equals("GET")));
+
+                assertTrue(oneBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("create")
+                                                && link.getHref().endsWith("/api/book/v1")
+                                                && link.getType().equals("POST")));
+
+                assertTrue(oneBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("update")
+                                                && link.getHref().endsWith("/api/book/v1")
+                                                && link.getType().equals("PUT")));
+
+                assertTrue(oneBook.getLinks().stream()
+                                .anyMatch(link -> link.getRel().value().equals("delete")
+                                                && link.getHref().endsWith("/api/book/v1/1")
+                                                && link.getType().equals("DELETE")));
+
+                assertEquals("Author Test1", oneBook.getAuthor());
+                assertEquals("Title Test1", oneBook.getTitle());
+                assertEquals(fixedDate, oneBook.getLaunchDate());
+                assertEquals(26D, oneBook.getPrice().doubleValue(), 0.001);
+
+                verify(repository, times(1)).findById(1L);
+                verify(repository, times(1)).save(any(Book.class));
+        }
+
+        @Test
+        void findAll() {
+                LocalDateTime fixedDate = LocalDateTime.of(2024, 10, 15, 10, 30, 0);
+                List<Book> list = input.mockBookEntityList();
+                for (Book book : list) {
+                        book.setLaunchDate(fixedDate);
+                }
+
+                Pageable pageable = PageRequest.of(0, 10);
+                Page<Book> page = new PageImpl<>(list, pageable, list.size());
+
+                when(repository.findAll(pageable)).thenReturn(page);
+
+                // Monta um PagedModel simulado retornado pelo assembler
+                List<EntityModel<BookDTO>> dtoModels = list.stream().map(entity -> {
+                        BookDTO dto = new BookDTO();
+                        dto.setId(entity.getId());
+                        dto.setAuthor(entity.getAuthor());
+                        dto.setLaunchDate(entity.getLaunchDate());
+                        dto.setPrice(entity.getPrice());
+                        dto.setTitle(entity.getTitle());
+                        return EntityModel.of(dto);
+                }).toList();
+
+                PagedModel<EntityModel<BookDTO>> pagedModel = PagedModel.of(dtoModels,
+                                new PagedModel.PageMetadata(page.getSize(), page.getNumber(), page.getTotalElements()));
+
+                when(assembler.toModel(any(Page.class), any(Link.class))).thenReturn(pagedModel);
+
+                var result = service.findAll(pageable);
+
+                assertNotNull(result);
+                assertEquals(list.size(), result.getContent().size());
+
+                EntityModel<BookDTO> firstModel = result.getContent().stream().findFirst().orElseThrow();
+                BookDTO firstDto = firstModel.getContent();
+
+                assertNotNull(firstDto);
+                assertEquals("Author Test0", firstDto.getAuthor());
+
+                verify(repository, times(1)).findAll(pageable);
+        }
+
+        @Test
+        void delete() {
+                Book book = input.mockBookEntity(1);
+                book.setId(1L);
+                when(repository.findById(1L)).thenReturn(Optional.of(book));
+                service.delete(1L);
+                verify(repository, times(1)).findById(anyLong());
+                verify(repository, times(1)).delete(any(Book.class));
+                verifyNoMoreInteractions(repository);
+
+        }
 
 }

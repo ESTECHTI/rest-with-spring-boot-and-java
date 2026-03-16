@@ -59,7 +59,8 @@ class PersonServicesTest {
 
                 assertTrue(fourPerson.getLinks().stream()
                                 .anyMatch(link -> link.getRel().value().equals("findAll")
-                                                && link.getHref().endsWith("/api/person/v1")
+                                                && link.getHref()
+                                                                .endsWith("/api/person/v1?page=0&size=12&direction=asc")
                                                 && link.getType().equals("GET")));
 
                 assertTrue(fourPerson.getLinks().stream()
@@ -101,27 +102,28 @@ class PersonServicesTest {
                 assertNotNull(fourPerson.getId());
                 assertNotNull(fourPerson.getLinks());
 
-                assertNotNull(fourPerson.getLinks().stream()
+                assertTrue(fourPerson.getLinks().stream()
                                 .anyMatch(link -> link.getRel().value().equals("self")
                                                 && link.getHref().endsWith("/api/person/v1/1")
                                                 && link.getType().equals("GET")));
 
-                assertNotNull(fourPerson.getLinks().stream()
+                assertTrue(fourPerson.getLinks().stream()
                                 .anyMatch(link -> link.getRel().value().equals("findAll")
-                                                && link.getHref().endsWith("/api/person/v1")
+                                                && link.getHref()
+                                                                .endsWith("/api/person/v1?page=0&size=12&direction=asc")
                                                 && link.getType().equals("GET")));
 
-                assertNotNull(fourPerson.getLinks().stream()
+                assertTrue(fourPerson.getLinks().stream()
                                 .anyMatch(link -> link.getRel().value().equals("create")
                                                 && link.getHref().endsWith("/api/person/v1")
                                                 && link.getType().equals("POST")));
 
-                assertNotNull(fourPerson.getLinks().stream()
+                assertTrue(fourPerson.getLinks().stream()
                                 .anyMatch(link -> link.getRel().value().equals("update")
                                                 && link.getHref().endsWith("/api/person/v1")
                                                 && link.getType().equals("PUT")));
 
-                assertNotNull(fourPerson.getLinks().stream()
+                assertTrue(fourPerson.getLinks().stream()
                                 .anyMatch(link -> link.getRel().value().equals("delete")
                                                 && link.getHref().endsWith("/api/person/v1/1")
                                                 && link.getType().equals("DELETE")));
@@ -158,27 +160,28 @@ class PersonServicesTest {
                 assertNotNull(fourPerson.getId());
                 assertNotNull(fourPerson.getLinks());
 
-                assertNotNull(fourPerson.getLinks().stream()
+                assertTrue(fourPerson.getLinks().stream()
                                 .anyMatch(link -> link.getRel().value().equals("self")
                                                 && link.getHref().endsWith("/api/person/v1/1")
                                                 && link.getType().equals("GET")));
 
-                assertNotNull(fourPerson.getLinks().stream()
+                assertTrue(fourPerson.getLinks().stream()
                                 .anyMatch(link -> link.getRel().value().equals("findAll")
-                                                && link.getHref().endsWith("/api/person/v1")
+                                                && link.getHref()
+                                                                .endsWith("/api/person/v1?page=0&size=12&direction=asc")
                                                 && link.getType().equals("GET")));
 
-                assertNotNull(fourPerson.getLinks().stream()
+                assertTrue(fourPerson.getLinks().stream()
                                 .anyMatch(link -> link.getRel().value().equals("create")
                                                 && link.getHref().endsWith("/api/person/v1")
                                                 && link.getType().equals("POST")));
 
-                assertNotNull(fourPerson.getLinks().stream()
+                assertTrue(fourPerson.getLinks().stream()
                                 .anyMatch(link -> link.getRel().value().equals("update")
                                                 && link.getHref().endsWith("/api/person/v1")
                                                 && link.getType().equals("PUT")));
 
-                assertNotNull(fourPerson.getLinks().stream()
+                assertTrue(fourPerson.getLinks().stream()
                                 .anyMatch(link -> link.getRel().value().equals("delete")
                                                 && link.getHref().endsWith("/api/person/v1/1")
                                                 && link.getType().equals("DELETE")));
