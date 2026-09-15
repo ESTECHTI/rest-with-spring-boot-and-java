@@ -15,7 +15,8 @@ public class GreetingController {
     private static final String template = "Hello, %s";
     private final AtomicLong counter = new AtomicLong();
 
-    // http://localhost:8080/greeting?name=Leandro
+    // http://localhost:8080/greeting?name=Leandro -> query params
+    // http://localhost:8080/math/sum/2/3 -> path params
     @RequestMapping("/greeting")
     public Greeting greeting(
             @RequestParam(value = "name", defaultValue = "World") String name) {

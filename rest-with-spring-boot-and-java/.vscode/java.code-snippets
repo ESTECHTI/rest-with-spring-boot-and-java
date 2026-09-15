@@ -1,0 +1,21 @@
+{
+	"Spring Custom Exception": {
+		"scope": "java",
+		"prefix": ["exception", "ex"],
+		"body": [
+			"import org.springframework.http.HttpStatus;",
+			"import org.springframework.web.bind.annotation.ResponseStatus;",
+			"",
+			"@ResponseStatus(HttpStatus.BAD_REQUEST)",
+			"public class ${TM_FILENAME_BASE} extends RuntimeException {",
+			"",
+			"\tprivate static final long serialVersionUID = 1L;",
+			"",
+			"\tpublic ${TM_FILENAME_BASE}(String ex) {",
+			"\t\tsuper(ex);",
+			"\t}",
+			"}"
+		],
+		"description": "Gera a estrutura completa de Exception com imports e construtor baseando-se no nome do arquivo"
+	}
+}

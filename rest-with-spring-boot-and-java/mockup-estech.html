@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estech - Spring Run & Debug Configurator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #0a0d14;
+      --bg-sidebar: #0e131f;
+      --bg-panel: #111827;
+      --bg-card: #162032;
+      --bg-input: #121a29;
+      --border-subtle: #1e293b;
+      --border-card: #22324d;
+      --border-focus: #38bdf8;
+      
+      --text-white: #ffffff;
+      --text-main: #cbd5e1;
+      --text-muted: #64748b;
+      --text-key: #fb923c;
+      --text-val: #38bdf8;
+      --text-secret: #4ade80;
+      
+      --accent-blue: #2563eb;
+      --accent-blue-hover: #1d4ed8;
+      --accent-green: #16a34a;
+      --accent-green-hover: #15803d;
+      --accent-purple: #7c3aed;
+      --accent-purple-bg: #2e1065;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 13px;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .app-window {
+      width: 100%;
+      max-width: 1220px;
+      background: var(--bg-panel);
+      border: 1px solid var(--border-card);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Top Navigation Header */
+    .top-header {
+      background: #0d121c;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .top-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .top-title-text h1 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-white);
+      letter-spacing: -0.2px;
+    }
+
+    .top-title-text p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-intellij {
+      background: #2a1b3d;
+      color: #d8b4fe;
+      border-color: #6b21a8;
+    }
+    .btn-intellij:hover {
+      background: #3b2257;
+      border-color: #9333ea;
+    }
+
+    .btn-save {
+      background: #1d4ed8;
+      color: var(--text-white);
+      box-shadow: 0 2px 10px rgba(29, 78, 216, 0.35);
+    }
+    .btn-save:hover {
+      background: #2563eb;
+    }
+
+    .btn-run {
+      background: #16a34a;
+      color: var(--text-white);
+      box-shadow: 0 2px 10px rgba(22, 163, 74, 0.35);
+    }
+    .btn-run:hover {
+      background: #15803d;
+    }
+
+    /* Main Container (Sidebar + Content) */
+    .main-body {
+      display: flex;
+      flex: 1;
+      min-height: 720px;
+    }
+
+    /* Left Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-subtle);
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .sidebar-top {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Estech Logo */
+    .estech-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 6px 12px 6px;
+      border-bottom: 1px solid #1a2336;
+    }
+
+    .brand-logo-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-logo-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 9px;
+      object-fit: cover;
+      box-shadow: 0 4px 14px rgba(0, 122, 204, 0.45);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      transition: transform 0.2s ease;
+    }
+    .brand-logo-img:hover {
+      transform: scale(1.05);
+    }
+
+    .brand-title {
+      font-size: 19px;
+      font-weight: 800;
+      color: #38bdf8;
+      letter-spacing: -0.5px;
+      line-height: 1;
+    }
+
+    .brand-sub {
+      font-size: 8px;
+      font-weight: 700;
+      color: #22c55e;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+
+    /* Sidebar Navigation Menu */
+    .nav-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+      background: transparent;
+      text-align: left;
+      width: 100%;
+      color: var(--text-main);
+    }
+
+    .nav-item:hover {
+      background: #141d2e;
+      border-color: #1e2c45;
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+      border-color: #3b82f6;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+    }
+
+    .nav-icon {
+      font-size: 16px;
+      width: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-text h4 {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .nav-text span {
+      font-size: 10px;
+      color: #94a3b8;
+      display: block;
+      margin-top: 1px;
+    }
+
+    .nav-item.active .nav-text span {
+      color: #dbeafe;
+    }
+
+    /* Sidebar Presets Card */
+    .presets-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .presets-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-white);
+    }
+
+    .presets-card p {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .btn-presets {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #e2e8f0;
+      width: 100%;
+      justify-content: center;
+      padding: 7px 10px;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+    .btn-presets:hover {
+      background: #283548;
+      color: #38bdf8;
+      border-color: #38bdf8;
+    }
+
+    /* Content Area */
+    .content-area {
+      flex: 1;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      overflow-y: auto;
+    }
+
+    /* Tab Panels Container */
+    .tab-panel {
+      display: none;
+      flex-direction: column;
+      gap: 22px;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    .tab-panel.active-panel {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section-header {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #38bdf8;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #1b263b;
+    }
+
+    /* Forms & Inputs */
+    .form-row {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid-2 {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .grid-3 {
+      grid-template-columns: 1.2fr 1fr 1fr;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    .input-box {
+      background: var(--bg-input);
+      border: 1px solid var(--border-card);
+      border-radius: 6px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      transition: all 0.15s ease;
+    }
+
+    .input-box:focus-within {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 1px var(--border-focus);
+    }
+
+    .input-box input, .input-box select {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-white);
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 12px;
+      width: 100%;
+    }
+
+    .input-box select {
+      cursor: pointer;
+      appearance: none;
+    }
+
+    .input-icon {
+      color: #64748b;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      transition: color 0.15s;
+    }
+
+    .input-icon.edit-icon:hover {
+      color: #38bdf8;
+    }
+
+    .input-icon.search-icon {
+      color: #22c55e;
+    }
+    .input-icon.search-icon:hover {
+      color: #4ade80;
+    }
+
+    .select-prefix {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      color: var(--text-white);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      width: 100%;
+    }
+
+    .select-chevron {
+      color: #64748b;
+      font-size: 10px;
+    }
+
+    /* Section 2: Compilação Prévia */
+    .task-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .task-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .custom-checkbox {
+      width: 20px;
+      height: 20px;
+      background: #2563eb;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    .custom-checkbox.unchecked {
+      background: #1e293b;
+      border: 1px solid #475569;
+      color: transparent;
+    }
+
+    .lightning-badge {
+      background: #2e1065;
+      border: 1px solid #6b21a8;
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c084fc;
+      font-size: 14px;
+    }
+
+    .task-text b {
+      color: var(--text-white);
+      font-size: 13px;
+    }
+
+    .task-text p {
+      font-size: 11px;
+      color: #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+      margin-top: 3px;
+    }
+
+    .badge-pill-blue {
+      background: #0c4a6e;
+      color: #38bdf8;
+      border: 1px solid #0284c7;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    /* Section 3: Variáveis de Ambiente Table */
+    .env-wrapper {
+      background: #0f172a;
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .env-header {
+      background: #141e33;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border-card);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .env-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--text-white);
+      font-size: 12px;
+    }
+
+    .badge-counter {
+      background: #1e3a8a;
+      color: #93c5fd;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .env-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-table {
+      background: #1e293b;
+      color: #e2e8f0;
+      border: 1px solid #334155;
+      padding: 6px 12px;
+      font-size: 11px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-table:hover {
+      background: #29384d;
+      color: #fff;
+    }
+
+    .btn-table-add {
+      color: #4ade80;
+      border-color: #166534;
+      background: #052e16;
+    }
+    .btn-table-add:hover {
+      background: #14532d;
+      color: #86efac;
+    }
+
+    /* Table Styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 12px;
+    }
+
+    thead th {
+      background: #111a2e;
+      color: #38bdf8;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 10px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    tbody td {
+      padding: 8px 16px;
+      border-bottom: 1px solid #1a253c;
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .td-key {
+      color: var(--text-key);
+      font-weight: 600;
+      width: 35%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .td-val {
+      color: var(--text-val);
+    }
+
+    .td-val.secret {
+      color: var(--text-secret);
+      font-style: italic;
+    }
+
+    .td-delete {
+      width: 40px;
+      text-align: right;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 13px;
+      transition: color 0.15s;
+    }
+    .td-delete:hover {
+      color: #ef4444;
+    }
+
+    /* Custom Cards in Other Tabs */
+    .card-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 8px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .tag-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+    .chip:hover {
+      border-color: #38bdf8;
+      color: #fff;
+    }
+    .chip.selected {
+      background: #0369a1;
+      border-color: #38bdf8;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.3);
+    }
+
+    /* Presets Modal */
+    .modal-backdrop {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.15s ease;
+    }
+
+    .modal-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      width: 540px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      background: #1e293b;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #334155;
+    }
+    .modal-header h3 {
+      font-size: 14px;
+      color: #fff;
+      font-weight: 700;
+    }
+    .modal-close {
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .modal-close:hover { color: #fff; }
+
+    .modal-content {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .preset-item {
+      background: #162032;
+      border: 1px solid #22324d;
+      border-radius: 8px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.15s;
+    }
+    .preset-item:hover {
+      border-color: #38bdf8;
+    }
+    .preset-info h4 {
+      font-size: 13px;
+      color: #fff;
+      font-weight: 600;
+    }
+    .preset-info p {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid #3b82f6;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 200;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Footer */
+    .app-footer {
+      background: #0b1019;
+      border-top: 1px solid var(--border-subtle);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-pulse {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #22c55e;
+    }
+
+    .footer-right {
+      font-family: 'JetBrains Mono', monospace;
+      color: #94a3b8;
+    }
+    .footer-right b {
+      color: #38bdf8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-window">
+    
+    <!-- Top Header -->
+    <div class="top-header">
+      <div class="top-title-group">
+        <img src="logo-estech.jpg" alt="Estech Logo" class="brand-logo-img" style="width: 34px; height: 34px; border-radius: 7px;" />
+        <div class="top-title-text">
+          <h1>Estech - Run & Debug Configurator</h1>
+          <p>Execução e Debug 100% integrados (Zero configuração manual ou pasta .vscode no projeto)</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn btn-intellij" onclick="switchTab(5)">
+          <span>📥</span> Importar do IntelliJ (.idea)
+        </button>
+        <button class="btn btn-save" onclick="showToast('💾 Configurações salvas com sucesso no Run & Debug!')">
+          <span>💾</span> Salvar Alterações
+        </button>
+        <button class="btn btn-run" onclick="showToast('🚀 Sessão de Debug iniciada com F5!')">
+          <span>▶</span> Rodar no Debug (F5)
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-body">
+      
+      <!-- Left Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <!-- Logo Brand -->
+          <div class="estech-brand">
+            <div class="brand-logo-wrap">
+              <img src="logo-estech.jpg" alt="Estech 3D Logo" class="brand-logo-img" />
+            </div>
+            <div>
+              <div class="brand-title">Estech 🍃</div>
+              <div class="brand-sub">SPRING RUN & DEBUG CONFIGURATOR</div>
+            </div>
+          </div>
+
+          <!-- Vertical Tabs Navigation -->
+          <nav class="nav-menu">
+            <button class="nav-item active" onclick="switchTab(0)">
+              <span class="nav-icon">🖥️</span>
+              <div class="nav-text">
+                <h4>1. Aplicação</h4>
+                <span>Configurações principais</span>
+              </div>
+            </button>
+
+            <button class="nav-item" onclick="switchTab(1)">
+              <span class="nav-icon">⚡</span>
+              <div class="nav-text">
+                <h4>2. Compilação</h4>
+                <span>Pre-launch task (Maven)</span>
+              </div>
+            </button>
+
+            <button class="nav-item" onclick="switchTab(2)">
+              <span class="nav-icon">🍃</span>
+              <div class="nav-text">
+                <h4>3. Variáveis de Ambiente</h4>
+                <span>Env Variables</span>
+              </div>
+            </button>
+
+            <button class="nav-item" onclick="switchTab(3)">
+              <span class="nav-icon">⚙️</span>
+              <div class="nav-text">
+                <h4>4. JVM & Opções</h4>
+                <span>VM Options</span>
+              </div>
+            </button>
+
+            <button class="nav-item" onclick="switchTab(4)">
+              <span class="nav-icon">🔀</span>
+              <div class="nav-text">
+                <h4>5. Perfis & Portas</h4>
+                <span>Perfis e portas</span>
+              </div>
+            </button>
+
+            <button class="nav-item" onclick="switchTab(5)">
+              <span class="nav-icon">📁</span>
+              <div class="nav-text">
+                <h4>6. Importar (.idea)</h4>
+                <span>Do IntelliJ IDEA</span>
+              </div>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Bottom Presets Card -->
+        <div class="presets-card">
+          <div class="presets-header">
+            <span>⭐</span> Presets Corporativos
+          </div>
+          <p>Salve e aplique padrões da sua equipe com 1 clique.</p>
+          <button class="btn btn-presets" onclick="openPresetsModal()">
+            <span>⚙️</span> Gerenciar Presets
+          </button>
+        </div>
+      </aside>
+
+      <!-- Content Area -->
+      <main class="content-area">
+        
+        <!-- ================= TAB 1: 1. APLICAÇÃO ================= -->
+        <div class="tab-panel active-panel" id="panel-0">
+          <section>
+            <div class="section-header">1. Parâmetros da Aplicação</div>
+            <div class="form-row grid-2" style="margin-bottom: 14px;">
+              <div class="field-group">
+                <label class="field-label">Nome da Configuração</label>
+                <div class="input-box">
+                  <input type="text" id="config-name" value="SIPNC Aplicafundosinv Backend" />
+                  <span class="input-icon edit-icon" onclick="document.getElementById('config-name').focus()">✏️</span>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Classe Principal (Main Class) - Auto-detectada</label>
+                <div class="input-box">
+                  <input type="text" id="main-class" value="br.gov.caixa.sipnc.aplicafundosinv.RunApplication" />
+                  <span class="input-icon search-icon" title="Buscar outra classe Main" onclick="showToast('🔍 1 classe principal encontrada no classpath!')">🔍</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row grid-3">
+              <div class="field-group">
+                <label class="field-label">Spring Active Profile</label>
+                <div class="input-box">
+                  <div class="select-prefix">
+                    <span>🍃</span>
+                    <input type="text" value="development" style="color: #cbd5e1;" />
+                  </div>
+                  <span class="select-chevron">▼</span>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Versão do JDK (Java)</label>
+                <div class="input-box">
+                  <div class="select-prefix">
+                    <span>☕</span>
+                    <select>
+                      <option selected>JDK 21 (jdk-21.0.12.1)</option>
+                      <option>JDK 17 (jdk-17.0.12)</option>
+                    </select>
+                  </div>
+                  <span class="select-chevron">▼</span>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Versão do Maven</label>
+                <div class="input-box">
+                  <div class="select-prefix">
+                    <span style="color: #f97316; font-weight: 800;">M</span>
+                    <select>
+                      <option selected>Apache Maven 3.9.16</option>
+                    </select>
+                  </div>
+                  <span class="select-chevron">▼</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Compilação Prévia Card -->
+          <section>
+            <div class="section-header">2. Compilação Prévia (Pre-Launch Task)</div>
+            <div class="task-card">
+              <div class="task-left">
+                <div class="custom-checkbox" id="chk-maven" onclick="toggleCheckbox(this)">✔</div>
+                <div class="lightning-badge">⚡</div>
+                <div class="task-text">
+                  <b>Executar compilação do Maven antes do Play (Automático)</b>
+                  <p>Execução direta gerenciada pelo Estech: mvn.cmd compile (com JAVA_HOME do JDK 21)</p>
+                </div>
+              </div>
+              <div class="badge-pill-blue">
+                Maven Compile Integrado
+              </div>
+            </div>
+          </section>
+
+          <!-- Resumo de Variáveis -->
+          <section>
+            <div class="section-header">3. Variáveis de Ambiente (Resumo)</div>
+            <div class="card-box" style="flex-direction: row; justify-content: space-between; align-items: center;">
+              <div>
+                <b style="color:#fff; font-size:13px;">12 variáveis ativas configuradas</b>
+                <p style="color:#94a3b8; font-size:11px; margin-top:2px;">SSO, Banco de Dados, APIs Corporativas e Perfis da Caixa.</p>
+              </div>
+              <button class="btn btn-table" onclick="switchTab(2)">
+                <span>🍃</span> Abrir Editor Completo de Variáveis
+              </button>
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= TAB 2: 2. COMPILAÇÃO (MAVEN) ================= -->
+        <div class="tab-panel" id="panel-1">
+          <section>
+            <div class="section-header">2. Compilação Prévia do Maven (Pre-Launch Task)</div>
+            
+            <div class="card-box">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <div class="custom-checkbox" id="chk-maven-tab" onclick="toggleCheckbox(this)">✔</div>
+                  <div>
+                    <b style="color:#fff; font-size:13px;">Compilar projeto com Maven antes de Iniciar (F5)</b>
+                    <p style="color:#94a3b8; font-size:11px; margin-top:2px;">Garante que classes alteradas e recursos do Spring sejam atualizados no target.</p>
+                  </div>
+                </div>
+                <span class="badge-pill-blue">Ativo</span>
+              </div>
+
+              <div class="form-row grid-2" style="margin-top: 10px;">
+                <div class="field-group">
+                  <label class="field-label">Comando Executável do Maven (mvn.cmd)</label>
+                  <div class="input-box">
+                    <input type="text" value="C:\Users\f725569\DevElisandro\Versões do Maven\apache-maven-3.9.16\bin\mvn.cmd" />
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Diretório de Trabalho (CWD)</label>
+                  <div class="input-box">
+                    <input type="text" value="C:\Users\f725569\DevElisandro\SIPNC-PROJETOS\SPNC-BACKEND\SIPNC-aplicafundosinv-backend" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Goals do Maven para Execução</label>
+                <div class="tag-chips">
+                  <span class="chip selected">compile</span>
+                  <span class="chip">clean</span>
+                  <span class="chip">test-compile</span>
+                  <span class="chip">package</span>
+                  <span class="chip">+ Adicionar Goal</span>
+                </div>
+              </div>
+
+              <div class="field-group" style="margin-top:4px;">
+                <label class="field-label">Flags Opcionais de Otimização</label>
+                <div style="display:flex; flex-direction:column; gap:8px; font-size:12px;">
+                  <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                    <input type="checkbox" checked /> Pular execução de testes unitários durante debug (-DskipTests)
+                  </label>
+                  <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                    <input type="checkbox" /> Executar em modo offline (-o)
+                  </label>
+                  <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                    <input type="checkbox" /> Forçar atualização de dependências snapshot (-U)
+                  </label>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= TAB 3: 3. VARIÁVEIS DE AMBIENTE ================= -->
+        <div class="tab-panel" id="panel-2">
+          <section>
+            <div class="section-header">3. Variáveis de Ambiente (Environment Variables - ENV)</div>
+            
+            <div class="env-wrapper">
+              <div class="env-header">
+                <div class="env-title">
+                  <span>Tabela de Variáveis</span>
+                  <span class="badge-counter" id="var-count">12 configuradas</span>
+                </div>
+                <div class="env-actions">
+                  <button class="btn-table btn-table-add" onclick="addNewEnvRow()">+ Adicionar Variável</button>
+                  <button class="btn-table" onclick="showToast('📄 Arquivo .env importado com sucesso!')">📄 Importar .env</button>
+                  <button class="btn-table" onclick="openPresetsModal()">📋 Carregar Modelo Caixa</button>
+                </div>
+              </div>
+
+              <table id="env-table">
+                <thead>
+                  <tr>
+                    <th>Nome da Variável (Chave)</th>
+                    <th>Valor Configurado</th>
+                    <th style="width: 40px;"></th>
+                  </tr>
+                </thead>
+                <tbody id="env-tbody">
+                  <tr>
+                    <td class="td-key"><span>🔑</span> SPRING_PROFILES_ACTIVE</td>
+                    <td class="td-val"><input type="text" value="development" style="background:transparent; border:none; color:#38bdf8; font-family:inherit; width:100%; outline:none;" /></td>
+                    <td class="td-delete" onclick="deleteEnvRow(this)">✕</td>
+                  </tr>
+                  <tr>
+                    <td class="td-key"><span>🏷️</span> AMBIENTE</td>
+                    <td class="td-val"><input type="text" value="NACIONAL" style="background:transparent; border:none; color:#38bdf8; font-family:inherit; width:100%; outline:none;" /></td>
+                    <td class="td-delete" onclick="deleteEnvRow(this)">✕</td>
+                  </tr>
+                  <tr>
+                    <td class="td-key"><span>📑</span> LOG_LEVEL</td>
+                    <td class="td-val"><input type="text" value="INFO" style="background:transparent; border:none; color:#38bdf8; font-family:inherit; width:100%; outline:none;" /></td>
+                    <td class="td-delete" onclick="deleteEnvRow(this)">✕</td>
+                  </tr>
+                  <tr>
+                    <td class="td-key"><span>🛡️</span> SSL_DISABLED</td>
+                    <td class="td-val"><input type="text" value="true" style="background:transparent; border:none; color:#38bdf8; font-family:inherit; width:100%; outline:none;" /></td>
+                    <td class="td-delete" onclick="deleteEnvRow(this)">✕</td>
+                  </tr>
+                  <tr>
+                    <td class="td-key"><span>🌐</span> SSO_ISSUER</td>
+                    <td class="td-val"><input type="text" value="https://login.des.caixa/auth/realms/intranet" style="background:transparent; border:none; color:#38bdf8; font-family:inherit; width:100%; outline:none;" /></td>
+                    <td class="td-delete" onclick="deleteEnvRow(this)">✕</td>
+                  </tr>
+                  <tr>
+                    <td class="td-key"><span>🔗</span> API_MANAGER_URL</td>
+                    <td class="td-val"><input type="text" value="api.des.caixa:8443" style="background:transparent; border:none; color:#38bdf8; font-family:inherit; width:100%; outline:none;" /></td>
+                    <td class="td-delete" onclick="deleteEnvRow(this)">✕</td>
+                  </tr>
+                  <tr>
+                    <td class="td-key"><span>🔗</span> API_TRILHA_BASEPATH</td>
+                    <td class="td-val"><input type="text" value="/plataforma-unificada/trilha" style="background:transparent; border:none; color:#38bdf8; font-family:inherit; width:100%; outline:none;" /></td>
+                    <td class="td-delete" onclick="deleteEnvRow(this)">✕</td>
+                  </tr>
+                  <tr>
+                    <td class="td-key"><span>🔑</span> SIPNC_API_KEY</td>
+                    <td class="td-val secret"><input type="text" value="1725c554ce8f2c4bb...89c79866db87ddb2" style="background:transparent; border:none; color:#4ade80; font-family:inherit; width:100%; outline:none;" /></td>
+                    <td class="td-delete" onclick="deleteEnvRow(this)">✕</td>
+                  </tr>
+                  <tr>
+                    <td class="td-key"><span>📄</span> FLAG_CERTIFICADO_DIGITAL</td>
+                    <td class="td-val"><input type="text" value="false" style="background:transparent; border:none; color:#38bdf8; font-family:inherit; width:100%; outline:none;" /></td>
+                    <td class="td-delete" onclick="deleteEnvRow(this)">✕</td>
+                  </tr>
+                  <tr>
+                    <td class="td-key"><span>👁️</span> CAMPOS_OCULTAR_TRILHA</td>
+                    <td class="td-val"><input type="text" value="senha,password,token,apiKey" style="background:transparent; border:none; color:#38bdf8; font-family:inherit; width:100%; outline:none;" /></td>
+                    <td class="td-delete" onclick="deleteEnvRow(this)">✕</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= TAB 4: 4. JVM & OPÇÕES ================= -->
+        <div class="tab-panel" id="panel-3">
+          <section>
+            <div class="section-header">4. JVM & Opções de Execução (VM Options)</div>
+            
+            <div class="card-box">
+              <b style="color:#fff; font-size:13px;">Parâmetros da Máquina Virtual Java (JVM)</b>
+              <p style="color:#94a3b8; font-size:11px;">Configurações de memória, Garbage Collector e encoding passadas na inicialização.</p>
+
+              <div class="form-row grid-2">
+                <div class="field-group">
+                  <label class="field-label">Memória Inicial (Heap Min -Xms)</label>
+                  <div class="input-box">
+                    <input type="text" value="-Xms512m" />
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Memória Máxima (Heap Max -Xmx)</label>
+                  <div class="input-box">
+                    <input type="text" value="-Xmx2048m" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row grid-2">
+                <div class="field-group">
+                  <label class="field-label">Garbage Collector (GC)</label>
+                  <div class="input-box">
+                    <select>
+                      <option selected>G1GC (-XX:+UseG1GC) - Recomendado</option>
+                      <option>ZGC (-XX:+UseZGC)</option>
+                      <option>Parallel GC (-XX:+UseParallelGC)</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Porta de Debug Remoto (JDWP)</label>
+                  <div class="input-box">
+                    <input type="text" value="5005" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Propriedades de Sistema (-D Customizados)</label>
+                <div class="input-box" style="height:70px; align-items:flex-start;">
+                  <textarea style="width:100%; height:100%; background:transparent; border:none; color:#38bdf8; font-family:'JetBrains Mono', monospace; font-size:11px; outline:none; resize:none;">-Dfile.encoding=UTF-8
+-Duser.timezone=America/Sao_Paulo
+-Dspring.output.ansi.enabled=ALWAYS</textarea>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= TAB 5: 5. PERFIS & PORTAS ================= -->
+        <div class="tab-panel" id="panel-4">
+          <section>
+            <div class="section-header">5. Perfis e Portas da Aplicação</div>
+            
+            <div class="card-box">
+              <div class="form-row grid-2">
+                <div class="field-group">
+                  <label class="field-label">Porta HTTP da Aplicação (server.port)</label>
+                  <div class="input-box">
+                    <input type="text" value="8080" />
+                    <button class="btn btn-presets" style="width:auto; padding:3px 8px; margin:0;" onclick="showToast('🟢 Porta 8080 está livre para uso!')">Testar Porta</button>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <label class="field-label">Porta do Actuator / Gestão (management.server.port)</label>
+                  <div class="input-box">
+                    <input type="text" value="8081" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Context Path (server.servlet.context-path)</label>
+                <div class="input-box">
+                  <input type="text" value="/api/v1" />
+                </div>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label">Seletor Rápido de Perfis Ativos do Spring</label>
+                <div class="tag-chips">
+                  <span class="chip selected" onclick="toggleChip(this)">development</span>
+                  <span class="chip" onclick="toggleChip(this)">local</span>
+                  <span class="chip" onclick="toggleChip(this)">homolog</span>
+                  <span class="chip" onclick="toggleChip(this)">production</span>
+                  <span class="chip" onclick="toggleChip(this)">test</span>
+                  <span class="chip" onclick="toggleChip(this)">docker</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- ================= TAB 6: 6. IMPORTAR (.IDEA) ================= -->
+        <div class="tab-panel" id="panel-5">
+          <section>
+            <div class="section-header">6. Importar Configurações do IntelliJ IDEA</div>
+            
+            <div class="card-box" style="background:#1b1329; border-color:#6b21a8;">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div style="background:#4a154b; width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:22px;">
+                  📥
+                </div>
+                <div>
+                  <b style="color:#fff; font-size:14px;">Importador Automático do IntelliJ (.idea)</b>
+                  <p style="color:#c084fc; font-size:11px; margin-top:2px;">Detecta classes Main, VM Options e Variáveis de Ambiente salvas no formato do IntelliJ.</p>
+                </div>
+              </div>
+
+              <div style="background:#0f0918; border:1px solid #4a154b; border-radius:8px; padding:12px; font-family:'JetBrains Mono', monospace; font-size:11px; color:#e9d5ff;">
+                🟢 <b>1 configuração detectada em .idea/workspace.xml:</b><br/>
+                &nbsp;&nbsp;• Nome: <b>RunApplication (Spring Boot)</b><br/>
+                &nbsp;&nbsp;• MainClass: <b>br.gov.caixa.sipnc.aplicafundosinv.RunApplication</b><br/>
+                &nbsp;&nbsp;• Variáveis encontradas: <b>12 variáveis de ambiente</b>
+              </div>
+
+              <div style="display:flex; justify-content:flex-end;">
+                <button class="btn btn-intellij" style="padding:10px 18px; font-size:13px;" onclick="showToast('✅ Todas as configurações do IntelliJ foram importadas com sucesso!')">
+                  <span>📥</span> Converter e Aplicar Configurações no Estech
+                </button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+      </main>
+
+    </div>
+
+    <!-- Presets Modal Backdrop -->
+    <div class="modal-backdrop" id="presets-modal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3>⭐ Gerenciar Presets Corporativos</h3>
+          <span class="modal-close" onclick="closePresetsModal()">✕</span>
+        </div>
+        <div class="modal-content">
+          <p style="font-size:12px; color:#94a3b8;">Selecione um modelo para carregar instantaneamente o conjunto de variáveis corporativas:</p>
+          
+          <div class="preset-item">
+            <div class="preset-info">
+              <h4>🏦 Padrão Backend Caixa (Completo)</h4>
+              <p>12 variáveis: SSO, API Manager, Trilha, SSL desabilitado e perfil development.</p>
+            </div>
+            <button class="btn btn-save" style="padding:6px 12px; font-size:11px;" onclick="applyPreset('Caixa Backend')">Aplicar</button>
+          </div>
+
+          <div class="preset-item">
+            <div class="preset-info">
+              <h4>🐳 Ambiente Local (Docker & Localhost)</h4>
+              <p>Perfil local, banco PostgreSQL no container, portas padrões 8080/5432.</p>
+            </div>
+            <button class="btn btn-save" style="padding:6px 12px; font-size:11px;" onclick="applyPreset('Local Docker')">Aplicar</button>
+          </div>
+
+          <div class="preset-item">
+            <div class="preset-info">
+              <h4>🧪 Microsserviço Minimalista</h4>
+              <p>Apenas profile development e logs em DEBUG.</p>
+            </div>
+            <button class="btn btn-save" style="padding:6px 12px; font-size:11px;" onclick="applyPreset('Minimal')">Aplicar</button>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; margin-top:10px;">
+            <button class="btn btn-table">+ Salvar Configuração Atual como Novo Preset</button>
+            <button class="btn btn-table" onclick="closePresetsModal()">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification Element -->
+    <div class="toast" id="toast-msg">
+      <span>🔔</span> <span id="toast-text">Ação executada com sucesso!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-left">
+        <div class="status-pulse"></div>
+        <span>Sincronizado: Pronto no Run & Debug do VS Code (Sem poluir seu projeto com pasta .vscode)</span>
+      </div>
+      <div class="footer-right">
+        Atalho: <b>F5</b> para iniciar sessão de Debug
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // Tab Switching
+    function switchTab(index) {
+      const navItems = document.querySelectorAll('.nav-item');
+      const panels = document.querySelectorAll('.tab-panel');
+
+      navItems.forEach((item, i) => {
+        if (i === index) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+
+      panels.forEach((panel, i) => {
+        if (i === index) {
+          panel.classList.add('active-panel');
+        } else {
+          panel.classList.remove('active-panel');
+        }
+      });
+    }
+
+    // Toggle Checkbox
+    function toggleCheckbox(el) {
+      if (el.classList.contains('unchecked')) {
+        el.classList.remove('unchecked');
+        el.textContent = '✔';
+        showToast('Compilação Maven Ativada');
+      } else {
+        el.classList.add('unchecked');
+        el.textContent = '';
+        showToast('Compilação Maven Desativada');
+      }
+    }
+
+    // Toggle Profile Chip
+    function toggleChip(el) {
+      el.classList.toggle('selected');
+      const selected = Array.from(document.querySelectorAll('.chip.selected')).map(c => c.textContent).join(',');
+      showToast('Perfis atualizados: ' + selected);
+    }
+
+    // Delete Row in Env Table
+    function deleteEnvRow(td) {
+      const row = td.closest('tr');
+      row.style.transition = 'all 0.2s';
+      row.style.opacity = '0';
+      row.style.transform = 'translateX(20px)';
+      setTimeout(() => {
+        row.remove();
+        updateVarCount();
+        showToast('Variável removida com sucesso');
+      }, 200);
+    }
+
+    // Add New Row in Env Table
+    function addNewEnvRow() {
+      const tbody = document.getElementById('env-tbody');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td class="td-key"><span>🔑</span> <input type="text" placeholder="NOVA_VARIAVEL" style="background:transparent; border:none; color:#fb923c; font-weight:600; font-family:inherit; width:100%; outline:none;" /></td>
+        <td class="td-val"><input type="text" placeholder="valor" style="background:transparent; border:none; color:#38bdf8; font-family:inherit; width:100%; outline:none;" /></td>
+        <td class="td-delete" onclick="deleteEnvRow(this)">✕</td>
+      `;
+      tbody.prepend(newRow);
+      updateVarCount();
+      showToast('Nova linha adicionada!');
+      newRow.querySelector('input').focus();
+    }
+
+    function updateVarCount() {
+      const rows = document.querySelectorAll('#env-tbody tr');
+      document.getElementById('var-count').textContent = rows.length + ' configuradas';
+    }
+
+    // Presets Modal Controls
+    function openPresetsModal() {
+      document.getElementById('presets-modal').style.display = 'flex';
+    }
+
+    function closePresetsModal() {
+      document.getElementById('presets-modal').style.display = 'none';
+    }
+
+    function applyPreset(name) {
+      closePresetsModal();
+      showToast('✅ Preset "' + name + '" aplicado com sucesso!');
+    }
+
+    // Toast Function
+    let toastTimeout;
+    function showToast(message) {
+      const toast = document.getElementById('toast-msg');
+      const toastText = document.getElementById('toast-text');
+      toastText.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+
+</body>
+</html>
