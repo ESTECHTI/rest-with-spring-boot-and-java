@@ -1,3 +1,4 @@
 {
-    "estech.coverageThreshold": 80
+    "estech.coverageThreshold": 80,
+    "java.configuration.updateBuildConfiguration": "interactive"
 }
