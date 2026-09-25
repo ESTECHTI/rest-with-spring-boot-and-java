@@ -11,7 +11,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.estechti.exception.ExceptionResponse;
-import br.com.estechti.exception.UnsupportedMathOperationException;
+import br.com.estechti.exception.ResourceNotFoundExceptionException;
 
 /* essas duas anotações trabalham juntas para criar um interceptador global de 
 exceções da API REST: 
@@ -42,14 +42,14 @@ public class CustomEntityResponseHandler extends ResponseEntityExceptionHandler 
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(UnsupportedMathOperationException.class)
+    @ExceptionHandler(ResourceNotFoundExceptionException.class)
     // O <ExceptionResponse> (Generics) define o tipo do corpo (body) da resposta HTTP que será serializado em JSON
-    public final ResponseEntity<ExceptionResponse> handleBadRequestException(UnsupportedMathOperationException ex, WebRequest request) {
+    public final ResponseEntity<ExceptionResponse> handleResourceNotFoundException(ResourceNotFoundExceptionException ex, WebRequest request) {
         ExceptionResponse response = new ExceptionResponse(
             new Date(),
             ex.getMessage(),
             request.getDescription(false));
 
-        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 }
